@@ -42,22 +42,6 @@
             font-weight: 700;
             color: #1a1a1a;
         }
-        .channel-info p {
-            font-size: 14px;
-            color: #8e8e93;
-        }
-        .banner {
-            background: #e6f3e6;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-            border: 1px solid #c8e6c9;
-            font-size: 15px;
-        }
-        .banner strong {
-            color: #00a650;
-        }
         .price-list {
             background: white;
             border-radius: 24px;
@@ -105,30 +89,26 @@
         .buy-button:hover {
             background: #008f45;
         }
-        .footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 20px 0 10px;
-            color: #8e8e93;
-            font-size: 13px;
-            border-top: 1px solid #eaeaea;
-        }
-        .footer a {
-            color: #2AABEE;
-            text-decoration: none;
-            font-weight: 500;
-        }
         .reviews {
             background: #f9f9f9;
             border-radius: 20px;
             padding: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+        }
+        .reviews-title {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
         }
         .review {
             display: flex;
             gap: 10px;
             margin-bottom: 12px;
             align-items: flex-start;
+        }
+        .review:last-child {
+            margin-bottom: 0;
         }
         .review-icon {
             background: #00a650;
@@ -149,6 +129,33 @@
         .review-text strong {
             color: #00a650;
         }
+        .subscribe {
+            margin-top: auto;
+            text-align: center;
+            padding: 16px 0 8px;
+        }
+        .subscribe-button {
+            background: #2AABEE;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 24px;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 18px rgba(42,171,238,0.2);
+            transition: background 0.2s;
+        }
+        .subscribe-button:hover {
+            background: #1f8eb5;
+        }
+        .subscribe-button span {
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
@@ -156,12 +163,7 @@
         <div class="avatar">S</div>
         <div class="channel-info">
             <h1>SUETAREGION70shop</h1>
-            <p>27 подписчиков • канал</p>
         </div>
-    </div>
-
-    <div class="banner">
-        <strong>Скидка до -5%</strong> на первый заказ по промокоду <strong>SUETA70</strong>
     </div>
 
     <div class="price-list">
@@ -215,7 +217,9 @@
         </div>
     </div>
 
+    <!-- Блок отзывов с заголовком -->
     <div class="reviews">
+        <div class="reviews-title">Наши отзывы</div>
         <div class="review">
             <div class="review-icon">✓</div>
             <div class="review-text"><strong>не обман</strong>, все пришло</div>
@@ -230,10 +234,11 @@
         </div>
     </div>
 
-    <div class="footer">
-        <p>🔗 <a href="https://t.me/SUETAREGION70shop">t.me/SUETAREGION70shop</a></p>
-        <p>Промокод SUETA70 действует в канале</p>
-        <p style="margin-top: 8px;">⭐ 50 звёзд — 92₽, 100 — 163₽, 150 — 234₽, 250 — 377₽,<br>350 — 519₽, 500 — 729₽, 750 — 1089₽, 1000 — 1439₽</p>
+    <!-- Кнопка подписки на канал -->
+    <div class="subscribe">
+        <a class="subscribe-button" href="https://t.me/SUETAREGION70shop">
+            <span>📱</span> Подписаться на канал
+        </a>
     </div>
 </body>
 </html>
