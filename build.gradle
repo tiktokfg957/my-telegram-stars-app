@@ -1,2 +1,10 @@
-// Пустой файл, всё управление теперь в settings.gradle
-// Можно оставить пустым или добавить task clean, но необязательно
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
