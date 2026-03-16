@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SUETAREGION70shop</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* Стили (аналогичные предыдущим, немного дополнены) */
         :root {
             --bg-color: #f5f7fa;
             --card-bg: #ffffff;
@@ -15,12 +17,8 @@
             --accent-blue: #2AABEE;
             --accent-yellow: #f39c12;
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 15px 35px rgba(0, 166, 80, 0.15);
-            --toast-bg: #323232;
-            --toast-text: #ffffff;
             --overlay-bg: rgba(0, 0, 0, 0.5);
         }
-
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #121212;
@@ -31,18 +29,14 @@
                 --accent-green: #2ecc71;
                 --accent-blue: #3b8fc2;
                 --accent-yellow: #f1c40f;
-                --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-                --shadow-hover: 0 15px 35px rgba(46, 204, 113, 0.25);
                 --overlay-bg: rgba(0, 0, 0, 0.7);
             }
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
@@ -51,17 +45,14 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s;
         }
-
-        /* Шапка */
         .header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 24px;
         }
-
         .avatar {
             width: 60px;
             height: 60px;
@@ -73,23 +64,19 @@
             font-size: 32px;
             font-weight: bold;
             color: white;
-            box-shadow: 0 4px 12px rgba(42, 171, 238, 0.3);
+            box-shadow: 0 4px 12px rgba(42,171,238,0.3);
         }
-
         .channel-info h1 {
             font-size: 22px;
             font-weight: 700;
             color: var(--text-primary);
         }
-
-        /* Список товаров */
         .price-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 24px;
         }
-
         .price-item {
             background: var(--card-bg);
             border-radius: 20px;
@@ -99,46 +86,31 @@
             justify-content: space-between;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            transition: transform 0.2s, box-shadow 0.2s;
         }
-
-        .price-item:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-        }
-
         .stars-info {
             display: flex;
             flex-direction: column;
         }
-
         .stars-count {
             font-weight: 700;
             font-size: 18px;
-            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
         .stars-count span {
             font-size: 22px;
-            filter: drop-shadow(0 2px 4px rgba(249, 180, 0, 0.4));
         }
-
         .price-label {
             font-size: 14px;
             color: var(--text-secondary);
-            margin-top: 2px;
         }
-
         .price-value {
             font-weight: 800;
             font-size: 24px;
             color: var(--accent-green);
             margin-right: 8px;
         }
-
         .buy-button {
             background: linear-gradient(145deg, #00a650, #008f45);
             border: none;
@@ -149,29 +121,14 @@
             font-size: 16px;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
-            box-shadow: 0 8px 16px rgba(0, 166, 80, 0.3);
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0,166,80,0.3);
             cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-
         .buy-button:hover {
             background: linear-gradient(145deg, #008f45, #007a3b);
-            box-shadow: 0 12px 24px rgba(0, 166, 80, 0.4);
-            transform: scale(1.02);
         }
-
-        .buy-button:active {
-            transform: scale(0.98);
-        }
-
-        .buy-button span {
-            font-size: 20px;
-        }
-
-        /* Отзывы */
         .reviews {
             background: var(--card-bg);
             border-radius: 24px;
@@ -180,32 +137,19 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
         }
-
         .reviews-title {
             font-weight: 700;
             font-size: 18px;
-            color: var(--text-primary);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
-
-        .reviews-title span {
-            font-size: 24px;
-        }
-
         .review {
             display: flex;
             gap: 12px;
-            margin-bottom: 16px;
-            align-items: flex-start;
+            margin-bottom: 12px;
         }
-
-        .review:last-child {
-            margin-bottom: 0;
-        }
-
         .review-icon {
             background: var(--accent-green);
             color: white;
@@ -216,64 +160,20 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            flex-shrink: 0;
-            box-shadow: 0 4px 8px rgba(0, 166, 80, 0.2);
         }
-
-        .review-text {
-            font-size: 15px;
-            color: var(--text-primary);
-            line-height: 1.4;
-        }
-
-        .review-text strong {
-            color: var(--accent-green);
-        }
-
-        /* Кнопка подписки (оставим, но можно убрать, если не нужна) */
-        .subscribe {
-            margin-top: auto;
+        .admin-link {
             text-align: center;
-            padding: 8px 0 16px;
+            margin: 20px 0 10px;
         }
-
-        .subscribe-button {
-            background: linear-gradient(145deg, #2AABEE, #1f8eb5);
-            border: none;
-            border-radius: 60px;
-            padding: 16px 28px;
-            color: white;
+        .admin-link button {
+            background: transparent;
+            border: 2px solid var(--accent-blue);
+            border-radius: 40px;
+            padding: 12px 24px;
+            color: var(--accent-blue);
             font-weight: 700;
-            font-size: 20px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 10px 25px rgba(42, 171, 238, 0.3);
-            transition: all 0.2s;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            width: 100%;
-            max-width: 320px;
-            margin: 0 auto;
             cursor: pointer;
         }
-
-        .subscribe-button:hover {
-            background: linear-gradient(145deg, #1f8eb5, #16789c);
-            box-shadow: 0 15px 35px rgba(42, 171, 238, 0.4);
-            transform: translateY(-2px);
-        }
-
-        .subscribe-button:active {
-            transform: translateY(0);
-        }
-
-        .subscribe-button span {
-            font-size: 28px;
-        }
-
-        /* Затемнение фона при открытом попапе */
         .overlay {
             display: none;
             position: fixed;
@@ -284,8 +184,6 @@
             background: var(--overlay-bg);
             z-index: 999;
         }
-
-        /* Всплывающее окно (попап) */
         .popup {
             display: none;
             position: fixed;
@@ -296,57 +194,118 @@
             border-radius: 28px;
             padding: 24px;
             width: 90%;
-            max-width: 340px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 360px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             z-index: 1000;
-            border: 1px solid var(--border-color);
             color: var(--text-primary);
         }
-
+        .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 24px;
+            cursor: pointer;
+        }
         .popup-header {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 16px;
             text-align: center;
         }
-
         .popup-detail {
             background: var(--bg-color);
             border-radius: 16px;
             padding: 16px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             text-align: center;
         }
-
         .popup-stars {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--accent-green);
         }
-
         .popup-price {
             font-size: 28px;
             font-weight: 800;
             color: var(--accent-green);
             margin: 8px 0;
         }
-
         .popup-receiver {
-            font-size: 16px;
             background: var(--card-bg);
             padding: 12px;
             border-radius: 40px;
             border: 1px dashed var(--accent-blue);
             margin: 12px 0;
-            word-break: break-all;
+            font-size: 16px;
         }
-
         .popup-receiver span {
             font-weight: 600;
             color: var(--accent-blue);
         }
-
-        .payment-status {
+        .popup-input {
+            margin: 16px 0;
+            text-align: left;
+        }
+        .popup-input label {
+            font-weight: 600;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .popup-input input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        .popup-file {
+            margin: 16px 0;
+            text-align: left;
+        }
+        .popup-file label {
+            font-weight: 600;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .popup-file input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-primary);
+        }
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .popup-button {
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .popup-button.primary {
+            background: linear-gradient(145deg, #00a650, #008f45);
+            color: white;
+        }
+        .popup-button.secondary {
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+        .popup-button.history {
+            background: var(--accent-blue);
+            color: white;
+        }
+        .waiting-status {
             background: #fff3cd;
             color: #856404;
             padding: 12px;
@@ -357,79 +316,115 @@
             gap: 12px;
             border: 1px solid #ffeeba;
         }
-
-        .payment-status.yellow {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .payment-status .icon {
-            font-size: 28px;
-        }
-
-        .payment-status .text {
-            font-weight: 500;
-        }
-
-        .popup-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .popup-button {
-            border: none;
-            border-radius: 40px;
-            padding: 14px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .popup-button.primary {
-            background: linear-gradient(145deg, #00a650, #008f45);
-            color: white;
-            box-shadow: 0 8px 16px rgba(0, 166, 80, 0.3);
-        }
-
-        .popup-button.primary:hover {
-            background: linear-gradient(145deg, #008f45, #007a3b);
-        }
-
-        .popup-button.secondary {
-            background: transparent;
-            border: 2px solid var(--accent-green);
-            color: var(--accent-green);
-        }
-
-        .popup-button.secondary:hover {
-            background: var(--accent-green);
-            color: white;
-        }
-
-        .popup-button.history {
-            background: var(--accent-blue);
-            color: white;
-        }
-
-        .popup-close {
-            position: absolute;
-            top: 12px;
-            right: 16px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-
         .hidden {
             display: none;
+        }
+        /* Админ-панель */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .admin-header h2 {
+            font-size: 24px;
+        }
+        .admin-login {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 20px;
+        }
+        .admin-login input {
+            width: 80%;
+            padding: 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        .admin-login button {
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 14px 30px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .order-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .order-id {
+            font-weight: 700;
+            color: var(--accent-blue);
+        }
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        .status-sent { background: #cce5ff; color: #004085; }
+        .order-detail {
+            font-size: 14px;
+            margin: 8px 0;
+        }
+        .order-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .order-actions button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            min-width: 80px;
+        }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-reject { background: #dc3545; color: white; }
+        .btn-sent { background: #007bff; color: white; }
+        .btn-delete { background: #6c757d; color: white; }
+        .receipt-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: var(--accent-blue);
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- Шапка -->
     <div class="header">
         <div class="avatar">S</div>
         <div class="channel-info">
@@ -437,151 +432,24 @@
         </div>
     </div>
 
-    <!-- Список товаров (карточки) -->
-    <div class="price-list">
-        <!-- 50 звёзд -->
-        <div class="price-item" data-stars="50" data-price="92" data-label="Популярный">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 50 звёзд</div>
-                <div class="price-label">Популярный</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">92₽</span>
-                <button class="buy-button" onclick="openPopup(50, 92, 'Популярный')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 100 звёзд -->
-        <div class="price-item" data-stars="100" data-price="163" data-label="Выгодно">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 100 звёзд</div>
-                <div class="price-label">Выгодно</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">163₽</span>
-                <button class="buy-button" onclick="openPopup(100, 163, 'Выгодно')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 150 звёзд -->
-        <div class="price-item" data-stars="150" data-price="234" data-label="Стандарт">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 150 звёзд</div>
-                <div class="price-label">Стандарт</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">234₽</span>
-                <button class="buy-button" onclick="openPopup(150, 234, 'Стандарт')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 250 звёзд -->
-        <div class="price-item" data-stars="250" data-price="377" data-label="Для блогера">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 250 звёзд</div>
-                <div class="price-label">Для блогера</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">377₽</span>
-                <button class="buy-button" onclick="openPopup(250, 377, 'Для блогера')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 350 звёзд -->
-        <div class="price-item" data-stars="350" data-price="519" data-label="Премиум">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 350 звёзд</div>
-                <div class="price-label">Премиум</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">519₽</span>
-                <button class="buy-button" onclick="openPopup(350, 519, 'Премиум')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 500 звёзд -->
-        <div class="price-item" data-stars="500" data-price="729" data-label="Супер хит">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 500 звёзд</div>
-                <div class="price-label">Супер хит</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">729₽</span>
-                <button class="buy-button" onclick="openPopup(500, 729, 'Супер хит')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 750 звёзд -->
-        <div class="price-item" data-stars="750" data-price="1089" data-label="VIP">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 750 звёзд</div>
-                <div class="price-label">VIP</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">1089₽</span>
-                <button class="buy-button" onclick="openPopup(750, 1089, 'VIP')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-
-        <!-- 1000 звёзд -->
-        <div class="price-item" data-stars="1000" data-price="1439" data-label="Легендарный">
-            <div class="stars-info">
-                <div class="stars-count"><span>⭐</span> 1000 звёзд</div>
-                <div class="price-label">Легендарный</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <span class="price-value">1439₽</span>
-                <button class="buy-button" onclick="openPopup(1000, 1439, 'Легендарный')">
-                    <span>🛒</span> Купить
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Список товаров -->
+    <div class="price-list" id="price-list"></div>
 
     <!-- Отзывы -->
     <div class="reviews">
-        <div class="reviews-title">
-            <span>⭐</span> Наши отзывы
-        </div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text"><strong>не обман</strong>, все пришло</div>
-        </div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text"><strong>спасибо огромное</strong>, не обман</div>
-        </div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text">все пришло, спасибо!</div>
-        </div>
+        <div class="reviews-title"><span>⭐</span> Наши отзывы</div>
+        <div class="review"><div class="review-icon">✓</div><div class="review-text"><strong>не обман</strong>, все пришло</div></div>
+        <div class="review"><div class="review-icon">✓</div><div class="review-text"><strong>спасибо огромное</strong>, не обман</div></div>
+        <div class="review"><div class="review-icon">✓</div><div class="review-text">все пришло, спасибо!</div></div>
     </div>
 
-    <!-- Кнопка подписки (можно оставить) -->
-    <div class="subscribe">
-        <button class="subscribe-button" onclick="alert('Подпишись в Telegram: @SUETAREGION70shop')">
-            <span>📱</span> Подписаться на канал
-        </button>
+    <!-- Кнопка для входа в админку -->
+    <div class="admin-link">
+        <button onclick="showAdminLogin()">🔐 Админ-панель</button>
     </div>
 
-    <!-- Затемнение фона -->
+    <!-- Затемнение и попап заказа -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
-
-    <!-- Попап (всплывающее окно) -->
     <div class="popup" id="popup">
         <div class="popup-close" onclick="closePopup()">×</div>
         <div class="popup-header">Оформление заказа</div>
@@ -589,77 +457,289 @@
             <div class="popup-stars" id="popupStars">50 звёзд</div>
             <div class="popup-price" id="popupPrice">92₽</div>
             <div class="popup-receiver">
-                <span>Т-Банк (Сбер)</span><br>
-                +7 901 613-50-86
-            </div>
-            <div style="font-size: 14px; color: var(--text-secondary); margin-top: 8px;">
-                Перевод по номеру телефона
+                <span>Т-Банк</span><br>+7 901 613-50-86
             </div>
         </div>
 
-        <!-- Блок ожидания (изначально скрыт) -->
-        <div id="waitingBlock" class="payment-status yellow hidden">
-            <span class="icon">⏳</span>
-            <span class="text">Ожидайте подтверждение оплаты от модераторов</span>
+        <!-- Поле для ввода Telegram username получателя -->
+        <div class="popup-input">
+            <label>Telegram username (на кого отправить звёзды):</label>
+            <input type="text" id="tgUsername" placeholder="@username" value="">
+        </div>
+
+        <!-- Загрузка чека -->
+        <div class="popup-file">
+            <label>Загрузить чек/скриншот оплаты:</label>
+            <input type="file" id="receiptFile" accept="image/*">
+        </div>
+
+        <!-- Блок ожидания после отправки -->
+        <div id="waitingBlock" class="waiting-status hidden">
+            <span>⏳</span> Ожидайте подтверждение оплаты от модераторов
         </div>
 
         <div class="popup-buttons" id="popupButtons">
-            <button class="popup-button primary" onclick="sendReceipt()">Отправить чек-скриншот</button>
+            <button class="popup-button primary" onclick="submitOrder()">Отправить заказ</button>
             <button class="popup-button secondary" onclick="closePopup()">Вернуться в меню</button>
             <button class="popup-button history" onclick="showHistory()">История моих покупок</button>
         </div>
     </div>
 
+    <!-- Админ-панель -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h2>Админ-панель</h2>
+            <button class="popup-close" onclick="hideAdminPanel()">×</button>
+        </div>
+        <div id="adminLoginForm" class="admin-login">
+            <input type="text" id="adminLogin" placeholder="Логин" value="admin">
+            <input type="password" id="adminPassword" placeholder="Пароль">
+            <button onclick="adminLogin()">Войти</button>
+        </div>
+        <div id="adminContent" style="display: none;">
+            <div style="margin-bottom: 20px;">
+                <button onclick="loadOrders()">Обновить заказы</button>
+            </div>
+            <div id="ordersList"></div>
+        </div>
+    </div>
+
     <script>
-        // Переменные для хранения текущего товара
+        // --- ИНИЦИАЛИЗАЦИЯ SUPABASE (твои данные) ---
+        const SUPABASE_URL = 'https://qzdrmzgpojwciniuimcs.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_SmfssQWcetmpRfesu5cx5Q_D63Oasx-';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // --- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
         let currentStars = 0;
         let currentPrice = 0;
         let currentLabel = '';
+        let selectedFile = null;
+        const ADMIN_LOGIN = 'admin';
+        const ADMIN_PASSWORD = 'sueta70admin';  // при желании смени пароль здесь
 
-        // Открыть попап с данными товара
+        // --- СПИСОК ТОВАРОВ ---
+        const products = [
+            { stars: 50, price: 92, label: 'Популярный' },
+            { stars: 100, price: 163, label: 'Выгодно' },
+            { stars: 150, price: 234, label: 'Стандарт' },
+            { stars: 250, price: 377, label: 'Для блогера' },
+            { stars: 350, price: 519, label: 'Премиум' },
+            { stars: 500, price: 729, label: 'Супер хит' },
+            { stars: 750, price: 1089, label: 'VIP' },
+            { stars: 1000, price: 1439, label: 'Легендарный' }
+        ];
+
+        // Отрисовка товаров
+        function renderProducts() {
+            const container = document.getElementById('price-list');
+            container.innerHTML = '';
+            products.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'price-item';
+                item.innerHTML = `
+                    <div class="stars-info">
+                        <div class="stars-count"><span>⭐</span> ${p.stars} звёзд</div>
+                        <div class="price-label">${p.label}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="price-value">${p.price}₽</span>
+                        <button class="buy-button" onclick="openPopup(${p.stars}, ${p.price}, '${p.label}')">
+                            <span>🛒</span> Купить
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // --- ФУНКЦИИ ПОПАПА ---
         function openPopup(stars, price, label) {
             currentStars = stars;
             currentPrice = price;
             currentLabel = label;
-
             document.getElementById('popupStars').innerText = stars + ' звёзд';
             document.getElementById('popupPrice').innerText = price + '₽';
-
-            // Скрываем блок ожидания, если был показан
+            document.getElementById('tgUsername').value = '';
+            document.getElementById('receiptFile').value = '';
             document.getElementById('waitingBlock').classList.add('hidden');
-
-            // Показываем кнопки (на случай если они были скрыты)
             document.getElementById('popupButtons').style.display = 'flex';
-
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
         }
 
-        // Закрыть попап
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('popup').style.display = 'none';
         }
 
-        // Обработка нажатия "Отправить чек-скриншот"
-        function sendReceipt() {
-            // Скрываем кнопки
+        // Обработка выбора файла
+        document.getElementById('receiptFile').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+            } else {
+                selectedFile = null;
+            }
+        });
+
+        // Отправка заказа
+        async function submitOrder() {
+            const username = document.getElementById('tgUsername').value.trim();
+            if (!username) {
+                alert('Введите Telegram username');
+                return;
+            }
+            if (!selectedFile) {
+                alert('Выберите файл с чеком');
+                return;
+            }
+
+            // Показываем ожидание
             document.getElementById('popupButtons').style.display = 'none';
-            // Показываем жёлтую плашку ожидания
             document.getElementById('waitingBlock').classList.remove('hidden');
 
-            // Здесь можно было бы имитировать отправку, но в реале пользователь сам отправит скриншот в Telegram
-            // Для демо просто показываем уведомление
-            setTimeout(() => {
-                alert('Скриншот отправлен модератору. Ожидайте подтверждения.');
-            }, 100);
+            try {
+                // 1. Загружаем файл в Supabase Storage
+                const fileExt = selectedFile.name.split('.').pop();
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const { data: fileData, error: uploadError } = await supabase.storage
+                    .from('receipts')
+                    .upload(fileName, selectedFile);
+
+                if (uploadError) throw uploadError;
+
+                // Получаем публичный URL файла
+                const { data: urlData } = supabase.storage
+                    .from('receipts')
+                    .getPublicUrl(fileName);
+                const receiptUrl = urlData.publicUrl;
+
+                // 2. Создаём запись в таблице orders
+                const { error: insertError } = await supabase
+                    .from('orders')
+                    .insert({
+                        user_name: username,
+                        stars_count: currentStars,
+                        amount: currentPrice,
+                        receipt_url: receiptUrl,
+                        status: 'pending'
+                    });
+
+                if (insertError) throw insertError;
+
+                alert('Заказ отправлен! Ожидайте подтверждения.');
+
+            } catch (error) {
+                console.error(error);
+                alert('Ошибка при отправке заказа: ' + error.message);
+                // Возвращаем кнопки
+                document.getElementById('popupButtons').style.display = 'flex';
+                document.getElementById('waitingBlock').classList.add('hidden');
+            }
         }
 
-        // История покупок (пока заглушка)
+        // История покупок (заглушка)
         function showHistory() {
-            alert('Здесь будет история ваших покупок (в разработке).');
+            alert('Функция истории будет доступна позже');
             closePopup();
         }
+
+        // --- АДМИН-ПАНЕЛЬ ---
+        function showAdminLogin() {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('adminLoginForm').style.display = 'flex';
+            document.getElementById('adminContent').style.display = 'none';
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        function adminLogin() {
+            const login = document.getElementById('adminLogin').value;
+            const pass = document.getElementById('adminPassword').value;
+            if (login === ADMIN_LOGIN && pass === ADMIN_PASSWORD) {
+                document.getElementById('adminLoginForm').style.display = 'none';
+                document.getElementById('adminContent').style.display = 'block';
+                loadOrders();
+            } else {
+                alert('Неверный логин или пароль');
+            }
+        }
+
+        // Загрузка заказов
+        async function loadOrders() {
+            const { data: orders, error } = await supabase
+                .from('orders')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                alert('Ошибка загрузки заказов: ' + error.message);
+                return;
+            }
+
+            renderOrders(orders);
+        }
+
+        function renderOrders(orders) {
+            const container = document.getElementById('ordersList');
+            container.innerHTML = '';
+            orders.forEach(order => {
+                const card = document.createElement('div');
+                card.className = 'order-card';
+
+                let statusClass = '';
+                let statusText = '';
+                switch (order.status) {
+                    case 'pending': statusClass = 'status-pending'; statusText = '⏳ Ожидание'; break;
+                    case 'approved': statusClass = 'status-approved'; statusText = '✅ Одобрено'; break;
+                    case 'rejected': statusClass = 'status-rejected'; statusText = '❌ Отказ'; break;
+                    case 'sent': statusClass = 'status-sent'; statusText = '⭐ Звёзды отправлены'; break;
+                    default: statusClass = ''; statusText = order.status;
+                }
+
+                card.innerHTML = `
+                    <div class="order-header">
+                        <span class="order-id">#${order.id}</span>
+                        <span class="order-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="order-detail"><strong>${order.stars_count} звёзд</strong> — ${order.amount}₽</div>
+                    <div class="order-detail">👤 ${order.user_name}</div>
+                    <div class="order-detail">🕒 ${new Date(order.created_at).toLocaleString()}</div>
+                    ${order.receipt_url ? `<a href="${order.receipt_url}" target="_blank" class="receipt-link">📎 Чек-скриншот</a>` : ''}
+                    <div class="order-actions">
+                        <button class="btn-approve" onclick="updateOrderStatus(${order.id}, 'approved')">Одобрить</button>
+                        <button class="btn-reject" onclick="updateOrderStatus(${order.id}, 'rejected')">Отказать</button>
+                        <button class="btn-sent" onclick="updateOrderStatus(${order.id}, 'sent')">Звёзды отправлены</button>
+                        <button class="btn-delete" onclick="deleteOrder(${order.id})">Удалить</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        async function updateOrderStatus(id, status) {
+            const { error } = await supabase
+                .from('orders')
+                .update({ status })
+                .eq('id', id);
+            if (error) alert('Ошибка: ' + error.message);
+            else loadOrders();
+        }
+
+        async function deleteOrder(id) {
+            if (!confirm('Удалить заказ?')) return;
+            const { error } = await supabase
+                .from('orders')
+                .delete()
+                .eq('id', id);
+            if (error) alert('Ошибка: ' + error.message);
+            else loadOrders();
+        }
+
+        // Инициализация
+        renderProducts();
     </script>
 </body>
 </html>
