@@ -6,7 +6,7 @@
     <title>SUETAREGION70shop</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Стили (полные, как в предыдущем ответе) */
+        /* Стили (полные, как в предыдущем сообщении) */
         :root {
             --bg-color: #f5f7fa;
             --card-bg: #ffffff;
@@ -15,8 +15,10 @@
             --border-color: #f0f0f0;
             --accent-green: #00a650;
             --accent-blue: #2AABEE;
-            --shadow: 0 10px 25px rgba(0,0,0,0.05);
-            --overlay-bg: rgba(0,0,0,0.5);
+            --accent-yellow: #f39c12;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 35px rgba(0, 166, 80, 0.15);
+            --overlay-bg: rgba(0, 0, 0, 0.5);
         }
         @media (prefers-color-scheme: dark) {
             :root {
@@ -27,7 +29,8 @@
                 --border-color: #333333;
                 --accent-green: #2ecc71;
                 --accent-blue: #3b8fc2;
-                --overlay-bg: rgba(0,0,0,0.7);
+                --accent-yellow: #f1c40f;
+                --overlay-bg: rgba(0, 0, 0, 0.7);
             }
         }
         * {
@@ -37,7 +40,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg-color);
+            background-color: var(--bg-color);
             color: var(--text-primary);
             padding: 16px;
             display: flex;
@@ -66,6 +69,7 @@
         .channel-info h1 {
             font-size: 22px;
             font-weight: 700;
+            color: var(--text-primary);
         }
         .price-list {
             display: flex;
@@ -82,6 +86,11 @@
             justify-content: space-between;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+        .price-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
         .stars-info {
             display: flex;
@@ -121,13 +130,15 @@
             box-shadow: 0 8px 16px rgba(0,166,80,0.3);
             cursor: pointer;
         }
+        .buy-button:hover {
+            background: linear-gradient(145deg, #008f45, #007a3b);
+        }
         .reviews {
             background: var(--card-bg);
             border-radius: 24px;
             padding: 20px;
             margin-bottom: 24px;
             box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
         }
         .reviews-title {
             font-weight: 700;
@@ -151,7 +162,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
         }
         .admin-link {
             text-align: center;
@@ -226,7 +236,10 @@
             border-radius: 40px;
             border: 1px dashed var(--accent-blue);
             margin: 12px 0;
-            font-size: 16px;
+        }
+        .popup-receiver span {
+            font-weight: 600;
+            color: var(--accent-blue);
         }
         .popup-input {
             margin: 16px 0;
@@ -245,7 +258,6 @@
             border: 1px solid var(--border-color);
             background: var(--bg-color);
             color: var(--text-primary);
-            font-size: 16px;
         }
         .popup-file {
             margin: 16px 0;
@@ -273,7 +285,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            border: 1px solid #ffeeba;
         }
         .hidden {
             display: none;
@@ -305,7 +316,6 @@
             background: var(--accent-blue);
             color: white;
         }
-        /* Админ-панель */
         .admin-panel {
             display: none;
             position: fixed;
@@ -338,62 +348,36 @@
             border-radius: 40px;
             border: 1px solid var(--border-color);
             background: var(--card-bg);
-            color: var(--text-primary);
-            font-size: 16px;
-        }
-        .admin-login button {
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 14px 30px;
-            font-weight: 700;
-            cursor: pointer;
         }
         .order-card {
             background: var(--card-bg);
             border-radius: 20px;
             padding: 16px;
             margin-bottom: 16px;
-            border: 1px solid var(--border-color);
         }
         .order-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .order-id {
-            font-weight: 700;
-            color: var(--accent-blue);
         }
         .order-status {
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 12px;
-            font-weight: 600;
         }
         .status-pending { background: #fff3cd; color: #856404; }
         .status-approved { background: #d4edda; color: #155724; }
         .status-rejected { background: #f8d7da; color: #721c24; }
         .status-sent { background: #cce5ff; color: #004085; }
-        .order-detail {
-            font-size: 14px;
-            margin: 8px 0;
-        }
         .order-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
-            flex-wrap: wrap;
         }
         .order-actions button {
             padding: 8px 16px;
             border: none;
             border-radius: 30px;
-            font-weight: 600;
             cursor: pointer;
-            flex: 1;
-            min-width: 80px;
         }
         .btn-approve { background: #28a745; color: white; }
         .btn-reject { background: #dc3545; color: white; }
@@ -403,7 +387,6 @@
             display: inline-block;
             margin-top: 8px;
             color: var(--accent-blue);
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -415,10 +398,8 @@
         </div>
     </div>
 
-    <!-- Список товаров -->
     <div class="price-list" id="price-list"></div>
 
-    <!-- Отзывы -->
     <div class="reviews">
         <div class="reviews-title"><span>⭐</span> Наши отзывы</div>
         <div class="review"><div class="review-icon">✓</div><div class="review-text"><strong>не обман</strong>, все пришло</div></div>
@@ -426,12 +407,10 @@
         <div class="review"><div class="review-icon">✓</div><div class="review-text">все пришло, спасибо!</div></div>
     </div>
 
-    <!-- Кнопка входа в админку -->
     <div class="admin-link">
         <button onclick="showAdminLogin()">🔐 Админ-панель</button>
     </div>
 
-    <!-- Затемнение и попап -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
     <div class="popup" id="popup">
         <div class="popup-close" onclick="closePopup()">×</div>
@@ -443,29 +422,24 @@
                 <span>Т-Банк</span><br>+7 901 613-50-86
             </div>
         </div>
-
         <div class="popup-input">
-            <label>Telegram username (на кого отправить звёзды):</label>
+            <label>Telegram username:</label>
             <input type="text" id="tgUsername" placeholder="@username">
         </div>
-
         <div class="popup-file">
-            <label>Загрузить чек/скриншот оплаты:</label>
+            <label>Загрузить чек:</label>
             <input type="file" id="receiptFile" accept="image/*">
         </div>
-
         <div id="waitingBlock" class="waiting-status hidden">
-            <span>⏳</span> Ожидайте подтверждение оплаты от модераторов
+            <span>⏳</span> Ожидайте подтверждение
         </div>
-
         <div class="popup-buttons" id="popupButtons">
             <button class="popup-button primary" onclick="submitOrder()">Отправить заказ</button>
             <button class="popup-button secondary" onclick="closePopup()">Вернуться в меню</button>
-            <button class="popup-button history" onclick="showHistory()">История моих покупок</button>
+            <button class="popup-button history" onclick="showHistory()">История</button>
         </div>
     </div>
 
-    <!-- Админ-панель -->
     <div class="admin-panel" id="adminPanel">
         <div class="admin-header">
             <h2>Админ-панель</h2>
@@ -477,28 +451,21 @@
             <button onclick="adminLogin()">Войти</button>
         </div>
         <div id="adminContent" style="display: none;">
-            <div style="margin-bottom: 20px;">
-                <button onclick="loadOrders()">Обновить заказы</button>
-            </div>
+            <button onclick="loadOrders()">Обновить заказы</button>
             <div id="ordersList"></div>
         </div>
     </div>
 
     <script>
-        // Supabase config
         const SUPABASE_URL = 'https://qzdrmzgpojwciniuimcs.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_SmfssQWcetmpRfesu5cx5Q_D63Oasx-';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Global variables
         let currentStars = 0;
         let currentPrice = 0;
-        let currentLabel = '';
         let selectedFile = null;
-        const ADMIN_LOGIN = 'admin';
         const ADMIN_PASSWORD = 'sueta70admin';
 
-        // Товары (цены)
         const products = [
             { stars: 50, price: 92, label: 'Популярный' },
             { stars: 100, price: 163, label: 'Выгодно' },
@@ -510,7 +477,6 @@
             { stars: 1000, price: 1439, label: 'Легендарный' }
         ];
 
-        // Отрисовка товаров
         function renderProducts() {
             const container = document.getElementById('price-list');
             container.innerHTML = '';
@@ -524,7 +490,7 @@
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <span class="price-value">${p.price}₽</span>
-                        <button class="buy-button" onclick="openPopup(${p.stars}, ${p.price}, '${p.label}')">
+                        <button class="buy-button" onclick="openPopup(${p.stars}, ${p.price})">
                             <span>🛒</span> Купить
                         </button>
                     </div>
@@ -533,11 +499,9 @@
             });
         }
 
-        // Попап
-        function openPopup(stars, price, label) {
+        function openPopup(stars, price) {
             currentStars = stars;
             currentPrice = price;
-            currentLabel = label;
             document.getElementById('popupStars').innerText = stars + ' звёзд';
             document.getElementById('popupPrice').innerText = price + '₽';
             document.getElementById('tgUsername').value = '';
@@ -554,23 +518,13 @@
         }
 
         document.getElementById('receiptFile').addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                selectedFile = e.target.files[0];
-            } else {
-                selectedFile = null;
-            }
+            selectedFile = e.target.files[0] || null;
         });
 
         async function submitOrder() {
             const username = document.getElementById('tgUsername').value.trim();
-            if (!username) {
-                alert('Введите Telegram username');
-                return;
-            }
-            if (!selectedFile) {
-                alert('Выберите файл с чеком');
-                return;
-            }
+            if (!username) { alert('Введите username'); return; }
+            if (!selectedFile) { alert('Выберите чек'); return; }
 
             document.getElementById('popupButtons').style.display = 'none';
             document.getElementById('waitingBlock').classList.remove('hidden');
@@ -599,9 +553,8 @@
                     });
                 if (insertError) throw insertError;
 
-                alert('Заказ отправлен! Ожидайте подтверждения.');
+                alert('Заказ отправлен!');
             } catch (error) {
-                console.error(error);
                 alert('Ошибка: ' + error.message);
                 document.getElementById('popupButtons').style.display = 'flex';
                 document.getElementById('waitingBlock').classList.add('hidden');
@@ -609,11 +562,10 @@
         }
 
         function showHistory() {
-            alert('Функция истории будет доступна позже');
+            alert('Функция в разработке');
             closePopup();
         }
 
-        // Админка
         function showAdminLogin() {
             document.getElementById('adminPanel').style.display = 'block';
             document.getElementById('adminLoginForm').style.display = 'flex';
@@ -625,27 +577,23 @@
         }
 
         function adminLogin() {
-            const login = document.getElementById('adminLogin').value;
             const pass = document.getElementById('adminPassword').value;
-            if (login === ADMIN_LOGIN && pass === ADMIN_PASSWORD) {
+            if (pass === ADMIN_PASSWORD) {
                 document.getElementById('adminLoginForm').style.display = 'none';
                 document.getElementById('adminContent').style.display = 'block';
                 loadOrders();
             } else {
-                alert('Неверный логин или пароль');
+                alert('Неверный пароль');
             }
         }
 
         async function loadOrders() {
-            const { data: orders, error } = await supabase
+            const { data, error } = await supabase
                 .from('orders')
                 .select('*')
                 .order('created_at', { ascending: false });
-            if (error) {
-                alert('Ошибка загрузки: ' + error.message);
-                return;
-            }
-            renderOrders(orders);
+            if (error) { alert(error.message); return; }
+            renderOrders(data);
         }
 
         function renderOrders(orders) {
@@ -654,26 +602,27 @@
             orders.forEach(order => {
                 const card = document.createElement('div');
                 card.className = 'order-card';
-                let statusClass = '', statusText = '';
+                let statusClass = '';
+                let statusText = '';
                 switch (order.status) {
                     case 'pending': statusClass = 'status-pending'; statusText = '⏳ Ожидание'; break;
                     case 'approved': statusClass = 'status-approved'; statusText = '✅ Одобрено'; break;
                     case 'rejected': statusClass = 'status-rejected'; statusText = '❌ Отказ'; break;
-                    case 'sent': statusClass = 'status-sent'; statusText = '⭐ Звёзды отправлены'; break;
+                    case 'sent': statusClass = 'status-sent'; statusText = '⭐ Отправлено'; break;
                 }
                 card.innerHTML = `
                     <div class="order-header">
-                        <span class="order-id">#${order.id}</span>
+                        <span>#${order.id}</span>
                         <span class="order-status ${statusClass}">${statusText}</span>
                     </div>
-                    <div class="order-detail"><strong>${order.stars_count} звёзд</strong> — ${order.amount}₽</div>
-                    <div class="order-detail">👤 ${order.user_name}</div>
-                    <div class="order-detail">🕒 ${new Date(order.created_at).toLocaleString()}</div>
+                    <div>${order.stars_count} звёзд — ${order.amount}₽</div>
+                    <div>👤 ${order.user_name}</div>
+                    <div>🕒 ${new Date(order.created_at).toLocaleString()}</div>
                     ${order.receipt_url ? `<a href="${order.receipt_url}" target="_blank" class="receipt-link">📎 Чек</a>` : ''}
                     <div class="order-actions">
-                        <button class="btn-approve" onclick="updateOrderStatus(${order.id}, 'approved')">Одобрить</button>
-                        <button class="btn-reject" onclick="updateOrderStatus(${order.id}, 'rejected')">Отказать</button>
-                        <button class="btn-sent" onclick="updateOrderStatus(${order.id}, 'sent')">Звёзды отправлены</button>
+                        <button class="btn-approve" onclick="updateOrder(${order.id}, 'approved')">Одобрить</button>
+                        <button class="btn-reject" onclick="updateOrder(${order.id}, 'rejected')">Отказать</button>
+                        <button class="btn-sent" onclick="updateOrder(${order.id}, 'sent')">Отправлено</button>
                         <button class="btn-delete" onclick="deleteOrder(${order.id})">Удалить</button>
                     </div>
                 `;
@@ -681,18 +630,18 @@
             });
         }
 
-        async function updateOrderStatus(id, status) {
-            const { error } = await supabase.from('orders').update({ status }).eq('id', id);
-            if (error) alert('Ошибка: ' + error.message); else loadOrders();
+        async function updateOrder(id, status) {
+            await supabase.from('orders').update({ status }).eq('id', id);
+            loadOrders();
         }
 
         async function deleteOrder(id) {
-            if (!confirm('Удалить заказ?')) return;
-            const { error } = await supabase.from('orders').delete().eq('id', id);
-            if (error) alert('Ошибка: ' + error.message); else loadOrders();
+            if (confirm('Удалить заказ?')) {
+                await supabase.from('orders').delete().eq('id', id);
+                loadOrders();
+            }
         }
 
-        // Запуск
         renderProducts();
     </script>
 </body>
