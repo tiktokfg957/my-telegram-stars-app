@@ -13,12 +13,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         WebView webView = findViewById(R.id.webview);
-        // Включаем JavaScript
         WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        // Чтобы ссылки открывались внутри WebView (а не в браузере)
-        webView.setWebViewClient(new WebViewClient());
-        // Загружаем локальный HTML
+        webSettings.setJavaScriptEnabled(true); // обязательно для ссылок
+        webView.setWebViewClient(new WebViewClient()); // открывать ссылки внутри WebView
         webView.loadUrl("file:///android_asset/index.html");
     }
 }
