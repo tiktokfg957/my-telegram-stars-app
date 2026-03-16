@@ -110,7 +110,7 @@
     </div>
 
     <script>
-        // Звук клика (используем Web Audio API для генерации простого щелчка)
+        // Простой звук (если не работает – игнорируем)
         function playClickSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -123,43 +123,51 @@
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.1);
             } catch (e) {
-                // если звук не поддерживается – игнорируем
+                console.log('Звук не поддерживается');
             }
         }
 
-        // Загрузка сохранённого счёта
+        // Загружаем счёт
         let stars = localStorage.getItem('clickerStars');
-        if (stars === null) stars = 0;
-        else stars = parseInt(stars);
+        if (stars === null) {
+            stars = 0;
+        } else {
+            stars = parseInt(stars);
+            if (isNaN(stars)) stars = 0;
+        }
 
         const scoreElement = document.getElementById('score');
         scoreElement.textContent = stars;
 
-        // Обработка клика по звезде
-        document.getElementById('clickButton').addEventListener('click', function() {
+        // Назначаем обработчик клика напрямую
+        const starButton = document.getElementById('clickButton');
+        starButton.onclick = function() {
+            // Отладочное сообщение
+            alert('Клик сработал! Текущий счёт: ' + stars);
+
             stars++;
             scoreElement.textContent = stars;
             localStorage.setItem('clickerStars', stars);
             playClickSound();
 
-            // Маленькая анимация – добавить класс, потом убрать
-            this.classList.add('active');
-            setTimeout(() => this.classList.remove('active'), 100);
-        });
+            // Анимация
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => this.style.transform = 'scale(1)', 100);
+        };
 
-        // Сброс счёта
-        document.getElementById('resetButton').addEventListener('click', function() {
+        // Сброс
+        document.getElementById('resetButton').onclick = function() {
             if (confirm('Сбросить все звёзды?')) {
                 stars = 0;
                 scoreElement.textContent = stars;
                 localStorage.setItem('clickerStars', stars);
             }
-        });
+        };
 
-        // Дополнительно: эффект пульсации каждые 5 секунд (не обязательно)
+        // Пульсация каждые 5 секунд
         setInterval(() => {
-            document.getElementById('clickButton').style.transform = 'scale(1.02)';
-            setTimeout(() => document.getElementById('clickButton').style.transform = 'scale(1)', 200);
+            starButton.style.transform = 'scale(1.02)';
+            setTimeout(() => starButton.style.transform = 'scale(1)', 200);
         }, 5000);
     </script>
 </body>
