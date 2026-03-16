@@ -3,27 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SUETAREGION70shop</title>
+    <title>SUETAREGION70shek</title>
     <style>
+        /* Светлая тема (по умолчанию) */
+        :root {
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b6b70;
+            --border-color: #f0f0f0;
+            --accent-green: #00a650;
+            --accent-blue: #2AABEE;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 35px rgba(0, 166, 80, 0.15);
+        }
+
+        /* Тёмная тема (автоматически, если включена на устройстве) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-primary: #ffffff;
+                --text-secondary: #a0a0a0;
+                --border-color: #333333;
+                --accent-green: #2ecc71;
+                --accent-blue: #3b8fc2;
+            }
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f5f7fa;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             padding: 16px;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+
         .header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
+
         .avatar {
             width: 60px;
             height: 60px;
@@ -35,123 +65,133 @@
             font-size: 32px;
             font-weight: bold;
             color: white;
-            box-shadow: 0 4px 10px rgba(42,171,238,0.3);
+            box-shadow: 0 4px 12px rgba(42,171,238,0.3);
         }
+
         .channel-info h1 {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: var(--text-primary);
         }
+
         .price-list {
-            background: white;
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
         }
+
         .price-item {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
         }
-        .price-item:last-child {
-            border-bottom: none;
+
+        .price-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
         }
+
+        .stars-info {
+            display: flex;
+            flex-direction: column;
+        }
+
         .stars-count {
-            font-weight: 600;
-            font-size: 16px;
-            color: #1a1a1a;
-        }
-        .stars-count span {
-            color: #f9b400;
-            margin-right: 4px;
-        }
-        .price-value {
             font-weight: 700;
             font-size: 18px;
-            color: #00a650;
-        }
-        .buy-button {
-            background: #00a650;
-            border: none;
-            border-radius: 40px;
-            padding: 8px 18px;
-            color: white;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s;
-            box-shadow: 0 4px 10px rgba(0,166,80,0.2);
-        }
-        .buy-button:hover {
-            background: #008f45;
-        }
-        .reviews {
-            background: #f9f9f9;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-        .reviews-title {
-            font-weight: 700;
-            font-size: 16px;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
-        .review {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-            align-items: flex-start;
-        }
-        .review-icon {
-            background: #00a650;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
+            gap: 6px;
         }
-        .review-text {
+
+        .stars-count span {
+            font-size: 22px;
+        }
+
+        .price-label {
             font-size: 14px;
-            color: #2c3e50;
+            color: var(--text-secondary);
+            margin-top: 2px;
         }
-        .review-text strong {
-            color: #00a650;
+
+        .price-value {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--accent-green);
+            margin-right: 8px;
         }
-        .subscribe {
-            margin-top: auto;
-            text-align: center;
-            padding: 16px 0 8px;
-        }
-        .subscribe-button {
-            background: #2AABEE;
+
+        .buy-button {
+            background: linear-gradient(145deg, #00a650, #008f45);
             border: none;
             border-radius: 40px;
-            padding: 14px 24px;
+            padding: 10px 22px;
             color: white;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 16px rgba(0,166,80,0.3);
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .buy-button:hover {
+            background: linear-gradient(145deg, #008f45, #007a3b);
+        }
+
+        .buy-button span {
+            font-size: 20px;
+        }
+
+        .channel-link {
+            text-align: center;
+            margin-top: 30px;
+            padding: 16px 0;
+        }
+
+        .channel-button {
+            background: linear-gradient(145deg, #2AABEE, #1f8eb5);
+            border: none;
+            border-radius: 60px;
+            padding: 16px 28px;
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 8px 18px rgba(42,171,238,0.2);
-            transition: background 0.2s;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(42,171,238,0.3);
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
         }
-        .subscribe-button:hover {
-            background: #1f8eb5;
+
+        .channel-button span {
+            font-size: 28px;
         }
-        .subscribe-button span {
-            font-size: 24px;
+
+        /* Адаптация для маленьких экранов */
+        @media (max-width: 360px) {
+            .price-item {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .buy-button {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -159,81 +199,65 @@
     <div class="header">
         <div class="avatar">S</div>
         <div class="channel-info">
-            <h1>SUETAREGION70shop</h1>
+            <h1>SUETAREGION70shek</h1>
         </div>
     </div>
 
-    <div class="price-list">
-        <!-- 50 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 50 звёзд</div>
-            <div class="price-value">92₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%2050%20звёзд">Купить</a>
-        </div>
-        <!-- 100 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 100 звёзд</div>
-            <div class="price-value">163₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20100%20звёзд">Купить</a>
-        </div>
-        <!-- 150 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 150 звёзд</div>
-            <div class="price-value">234₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20150%20звёзд">Купить</a>
-        </div>
-        <!-- 250 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 250 звёзд</div>
-            <div class="price-value">377₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20250%20звёзд">Купить</a>
-        </div>
-        <!-- 350 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 350 звёзд</div>
-            <div class="price-value">519₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20350%20звёзд">Купить</a>
-        </div>
-        <!-- 500 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 500 звёзд</div>
-            <div class="price-value">729₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20500%20звёзд">Купить</a>
-        </div>
-        <!-- 750 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 750 звёзд</div>
-            <div class="price-value">1089₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%20750%20звёзд">Купить</a>
-        </div>
-        <!-- 1000 звёзд -->
-        <div class="price-item">
-            <div class="stars-count"><span>⭐</span> 1000 звёзд</div>
-            <div class="price-value">1439₽</div>
-            <a class="buy-button" href="https://t.me/SUETAREGION70shop?text=Хочу%201000%20звёзд">Купить</a>
-        </div>
+    <!-- Список товаров -->
+    <div class="price-list" id="price-list">
+        <!-- Здесь товары будут созданы скриптом -->
     </div>
 
-    <div class="reviews">
-        <div class="reviews-title">Наши отзывы</div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text"><strong>не обман</strong>, все пришло</div>
-        </div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text"><strong>спасибо огромное</strong>, не обман</div>
-        </div>
-        <div class="review">
-            <div class="review-icon">✓</div>
-            <div class="review-text">все пришло, спасибо!</div>
-        </div>
-    </div>
-
-    <div class="subscribe">
-        <a class="subscribe-button" href="https://t.me/SUETAREGION70shop">
-            <span>📱</span> Подписаться на канал
+    <!-- Кнопка перехода в Telegram-канал -->
+    <div class="channel-link">
+        <a class="channel-button" href="https://t.me/SUETAREGION70shek">
+            <span>📱</span> Перейти в канал
         </a>
     </div>
+
+    <script>
+        // Массив товаров (цены из твоего первого сообщения)
+        const products = [
+            { stars: 50, price: 92, label: 'Популярный' },
+            { stars: 100, price: 163, label: 'Выгодно' },
+            { stars: 150, price: 234, label: 'Стандарт' },
+            { stars: 250, price: 377, label: 'Для блогера' },
+            { stars: 350, price: 519, label: 'Премиум' },
+            { stars: 500, price: 729, label: 'Супер хит' },
+            { stars: 750, price: 1089, label: 'VIP' },
+            { stars: 1000, price: 1439, label: 'Легендарный' }
+        ];
+
+        // Функция для создания карточек товаров
+        function renderProducts() {
+            const container = document.getElementById('price-list');
+            container.innerHTML = '';
+            products.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'price-item';
+                // При нажатии на кнопку открывается Telegram с предзаполненным сообщением
+                const telegramLink = `https://t.me/SUETAREGION70shek?text=Хочу%20${p.stars}%20звёзд%20за%20${p.price}₽`;
+                item.innerHTML = `
+                    <div class="stars-info">
+                        <div class="stars-count"><span>⭐</span> ${p.stars} звёзд</div>
+                        <div class="price-label">${p.label}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="price-value">${p.price}₽</span>
+                        <a class="buy-button" href="${telegramLink}" target="_blank">
+                            <span>🛒</span> Купить
+                        </a>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Запускаем отрисовку при загрузке страницы
+        renderProducts();
+
+        // Можно добавить простую проверку, что скрипт работает
+        console.log('Приложение загружено');
+    </script>
 </body>
 </html>
