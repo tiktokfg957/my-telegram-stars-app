@@ -6,7 +6,7 @@
     <title>SUETAREGION70shop</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Стили (аналогичные предыдущим, немного дополнены) */
+        /* Светлая тема (по умолчанию) */
         :root {
             --bg-color: #f5f7fa;
             --card-bg: #ffffff;
@@ -17,8 +17,11 @@
             --accent-blue: #2AABEE;
             --accent-yellow: #f39c12;
             --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 15px 35px rgba(0, 166, 80, 0.15);
             --overlay-bg: rgba(0, 0, 0, 0.5);
         }
+
+        /* Тёмная тема (автоматически, если включена на устройстве) */
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg-color: #121212;
@@ -29,14 +32,18 @@
                 --accent-green: #2ecc71;
                 --accent-blue: #3b8fc2;
                 --accent-yellow: #f1c40f;
+                --shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                --shadow-hover: 0 15px 35px rgba(46, 204, 113, 0.25);
                 --overlay-bg: rgba(0, 0, 0, 0.7);
             }
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
@@ -45,14 +52,17 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        /* Шапка */
         .header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 24px;
         }
+
         .avatar {
             width: 60px;
             height: 60px;
@@ -64,19 +74,24 @@
             font-size: 32px;
             font-weight: bold;
             color: white;
-            box-shadow: 0 4px 12px rgba(42,171,238,0.3);
+            box-shadow: 0 4px 12px rgba(42, 171, 238, 0.3);
         }
+
         .channel-info h1 {
             font-size: 22px;
             font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 2px;
         }
+
+        /* Список цен */
         .price-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
             margin-bottom: 24px;
         }
+
         .price-item {
             background: var(--card-bg);
             border-radius: 20px;
@@ -86,31 +101,46 @@
             justify-content: space-between;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        .price-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
         .stars-info {
             display: flex;
             flex-direction: column;
         }
+
         .stars-count {
             font-weight: 700;
             font-size: 18px;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 6px;
         }
+
         .stars-count span {
             font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(249, 180, 0, 0.4));
         }
+
         .price-label {
             font-size: 14px;
             color: var(--text-secondary);
+            margin-top: 2px;
         }
+
         .price-value {
             font-weight: 800;
             font-size: 24px;
             color: var(--accent-green);
             margin-right: 8px;
         }
+
         .buy-button {
             background: linear-gradient(145deg, #00a650, #008f45);
             border: none;
@@ -121,14 +151,29 @@
             font-size: 16px;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            box-shadow: 0 8px 16px rgba(0,166,80,0.3);
+            box-shadow: 0 8px 16px rgba(0, 166, 80, 0.3);
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.1);
         }
+
         .buy-button:hover {
             background: linear-gradient(145deg, #008f45, #007a3b);
+            box-shadow: 0 12px 24px rgba(0, 166, 80, 0.4);
+            transform: scale(1.02);
         }
+
+        .buy-button:active {
+            transform: scale(0.98);
+        }
+
+        .buy-button span {
+            font-size: 20px;
+        }
+
+        /* Отзывы */
         .reviews {
             background: var(--card-bg);
             border-radius: 24px;
@@ -137,19 +182,32 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
         }
+
         .reviews-title {
             font-weight: 700;
             font-size: 18px;
+            color: var(--text-primary);
             margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
+
+        .reviews-title span {
+            font-size: 24px;
+        }
+
         .review {
             display: flex;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
+            align-items: flex-start;
         }
+
+        .review:last-child {
+            margin-bottom: 0;
+        }
+
         .review-icon {
             background: var(--accent-green);
             color: white;
@@ -160,11 +218,26 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(0, 166, 80, 0.2);
         }
+
+        .review-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.4;
+        }
+
+        .review-text strong {
+            color: var(--accent-green);
+        }
+
+        /* Кнопка входа в админку */
         .admin-link {
             text-align: center;
             margin: 20px 0 10px;
         }
+
         .admin-link button {
             background: transparent;
             border: 2px solid var(--accent-blue);
@@ -173,7 +246,15 @@
             color: var(--accent-blue);
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.2s;
         }
+
+        .admin-link button:hover {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        /* Затемнение фона */
         .overlay {
             display: none;
             position: fixed;
@@ -184,6 +265,8 @@
             background: var(--overlay-bg);
             z-index: 999;
         }
+
+        /* Попап заказа */
         .popup {
             display: none;
             position: fixed;
@@ -195,23 +278,27 @@
             padding: 24px;
             width: 90%;
             max-width: 360px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             z-index: 1000;
             color: var(--text-primary);
         }
+
         .popup-close {
             position: absolute;
             top: 12px;
             right: 16px;
             font-size: 24px;
             cursor: pointer;
+            color: var(--text-secondary);
         }
+
         .popup-header {
             font-size: 20px;
             font-weight: 700;
             margin-bottom: 16px;
             text-align: center;
         }
+
         .popup-detail {
             background: var(--bg-color);
             border-radius: 16px;
@@ -219,16 +306,20 @@
             margin-bottom: 16px;
             text-align: center;
         }
+
         .popup-stars {
             font-size: 22px;
             font-weight: 700;
+            color: var(--text-primary);
         }
+
         .popup-price {
             font-size: 28px;
             font-weight: 800;
             color: var(--accent-green);
             margin: 8px 0;
         }
+
         .popup-receiver {
             background: var(--card-bg);
             padding: 12px;
@@ -237,20 +328,24 @@
             margin: 12px 0;
             font-size: 16px;
         }
+
         .popup-receiver span {
             font-weight: 600;
             color: var(--accent-blue);
         }
+
         .popup-input {
             margin: 16px 0;
             text-align: left;
         }
+
         .popup-input label {
             font-weight: 600;
             font-size: 14px;
             display: block;
             margin-bottom: 6px;
         }
+
         .popup-input input {
             width: 100%;
             padding: 12px;
@@ -260,16 +355,19 @@
             color: var(--text-primary);
             font-size: 16px;
         }
+
         .popup-file {
             margin: 16px 0;
             text-align: left;
         }
+
         .popup-file label {
             font-weight: 600;
             font-size: 14px;
             display: block;
             margin-bottom: 6px;
         }
+
         .popup-file input {
             width: 100%;
             padding: 10px;
@@ -278,33 +376,7 @@
             background: var(--bg-color);
             color: var(--text-primary);
         }
-        .popup-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        .popup-button {
-            border: none;
-            border-radius: 40px;
-            padding: 14px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .popup-button.primary {
-            background: linear-gradient(145deg, #00a650, #008f45);
-            color: white;
-        }
-        .popup-button.secondary {
-            background: transparent;
-            border: 2px solid var(--accent-green);
-            color: var(--accent-green);
-        }
-        .popup-button.history {
-            background: var(--accent-blue);
-            color: white;
-        }
+
         .waiting-status {
             background: #fff3cd;
             color: #856404;
@@ -316,9 +388,57 @@
             gap: 12px;
             border: 1px solid #ffeeba;
         }
+
         .hidden {
             display: none;
         }
+
+        .popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .popup-button {
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .popup-button.primary {
+            background: linear-gradient(145deg, #00a650, #008f45);
+            color: white;
+        }
+
+        .popup-button.primary:hover {
+            background: linear-gradient(145deg, #008f45, #007a3b);
+        }
+
+        .popup-button.secondary {
+            background: transparent;
+            border: 2px solid var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        .popup-button.secondary:hover {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .popup-button.history {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .popup-button.history:hover {
+            background: #1f8eb5;
+        }
+
         /* Админ-панель */
         .admin-panel {
             display: none;
@@ -332,15 +452,19 @@
             overflow-y: auto;
             padding: 20px;
         }
+
         .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .admin-header h2 {
             font-size: 24px;
+            color: var(--text-primary);
         }
+
         .admin-login {
             display: flex;
             flex-direction: column;
@@ -349,6 +473,7 @@
             height: 100%;
             gap: 20px;
         }
+
         .admin-login input {
             width: 80%;
             padding: 14px;
@@ -358,6 +483,7 @@
             color: var(--text-primary);
             font-size: 16px;
         }
+
         .admin-login button {
             background: var(--accent-blue);
             color: white;
@@ -367,6 +493,7 @@
             font-weight: 700;
             cursor: pointer;
         }
+
         .order-card {
             background: var(--card-bg);
             border-radius: 20px;
@@ -374,35 +501,42 @@
             margin-bottom: 16px;
             border: 1px solid var(--border-color);
         }
+
         .order-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
         }
+
         .order-id {
             font-weight: 700;
             color: var(--accent-blue);
         }
+
         .order-status {
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 12px;
             font-weight: 600;
         }
+
         .status-pending { background: #fff3cd; color: #856404; }
         .status-approved { background: #d4edda; color: #155724; }
         .status-rejected { background: #f8d7da; color: #721c24; }
         .status-sent { background: #cce5ff; color: #004085; }
+
         .order-detail {
             font-size: 14px;
             margin: 8px 0;
         }
+
         .order-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
             flex-wrap: wrap;
         }
+
         .order-actions button {
             padding: 8px 16px;
             border: none;
@@ -412,10 +546,12 @@
             flex: 1;
             min-width: 80px;
         }
+
         .btn-approve { background: #28a745; color: white; }
         .btn-reject { background: #dc3545; color: white; }
         .btn-sent { background: #007bff; color: white; }
         .btn-delete { background: #6c757d; color: white; }
+
         .receipt-link {
             display: inline-block;
             margin-top: 8px;
@@ -432,15 +568,24 @@
         </div>
     </div>
 
-    <!-- Список товаров -->
+    <!-- Список товаров будет заполнен динамически из скрипта -->
     <div class="price-list" id="price-list"></div>
 
     <!-- Отзывы -->
     <div class="reviews">
         <div class="reviews-title"><span>⭐</span> Наши отзывы</div>
-        <div class="review"><div class="review-icon">✓</div><div class="review-text"><strong>не обман</strong>, все пришло</div></div>
-        <div class="review"><div class="review-icon">✓</div><div class="review-text"><strong>спасибо огромное</strong>, не обман</div></div>
-        <div class="review"><div class="review-icon">✓</div><div class="review-text">все пришло, спасибо!</div></div>
+        <div class="review">
+            <div class="review-icon">✓</div>
+            <div class="review-text"><strong>не обман</strong>, все пришло</div>
+        </div>
+        <div class="review">
+            <div class="review-icon">✓</div>
+            <div class="review-text"><strong>спасибо огромное</strong>, не обман</div>
+        </div>
+        <div class="review">
+            <div class="review-icon">✓</div>
+            <div class="review-text">все пришло, спасибо!</div>
+        </div>
     </div>
 
     <!-- Кнопка для входа в админку -->
@@ -448,8 +593,10 @@
         <button onclick="showAdminLogin()">🔐 Админ-панель</button>
     </div>
 
-    <!-- Затемнение и попап заказа -->
+    <!-- Затемнение фона -->
     <div class="overlay" id="overlay" onclick="closePopup()"></div>
+
+    <!-- Попап заказа -->
     <div class="popup" id="popup">
         <div class="popup-close" onclick="closePopup()">×</div>
         <div class="popup-header">Оформление заказа</div>
@@ -516,7 +663,7 @@
         let currentLabel = '';
         let selectedFile = null;
         const ADMIN_LOGIN = 'admin';
-        const ADMIN_PASSWORD = 'sueta70admin';  // при желании смени пароль здесь
+        const ADMIN_PASSWORD = 'sueta70admin';  // пароль для входа в админку (можно изменить)
 
         // --- СПИСОК ТОВАРОВ ---
         const products = [
@@ -599,7 +746,7 @@
             document.getElementById('waitingBlock').classList.remove('hidden');
 
             try {
-                // 1. Загружаем файл в Supabase Storage
+                // 1. Загружаем файл в Supabase Storage (bucket 'receipts')
                 const fileExt = selectedFile.name.split('.').pop();
                 const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
                 const { data: fileData, error: uploadError } = await supabase.storage
@@ -638,7 +785,7 @@
             }
         }
 
-        // История покупок (заглушка)
+        // История покупок (пока заглушка)
         function showHistory() {
             alert('Функция истории будет доступна позже');
             closePopup();
