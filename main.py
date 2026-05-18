@@ -11,8 +11,8 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 logging.basicConfig(level=logging.INFO)
 
-BOT_TOKEN = "ТВОЙ_ТОКЕН_СЮДА"
-ADMIN_ID = 123456789  # Замени на свой Telegram ID
+BOT_TOKEN = "8979653241:AAF-RcEjP7Ii0e0qB8D7jLu6OaU8sCqCAXQ"
+ADMIN_ID = 8248607217  # Замени на свой Telegram ID
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
